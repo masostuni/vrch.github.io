@@ -1,34 +1,245 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>VRCHITECT - VRCH</title>
+  <title>vrch</title>
   <style>
-    /* Stile per il contenitore della pagina */
     body {
+      background-color: black;
+      font-family: Arial, sans-serif;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
+      color: white;
     }
-
-    /* Stile per il cubo */
-    .cube {
-      width: 100px;
-      height: 100px;
-      background-color: #ff0000;
-      transform-style: preserve-3d;
-      animation: rotate 5s infinite linear;
-    }
-
-  <footer>
-
-      <div class="footer-right foot">
-      <p>
-          © 627EEA LLC <br>
-          All rights reserved.
-
-        </p>
-      </div>
     
-  </footer>
+    .marquee-container {
+      width: 100%;
+      overflow: hidden;
+    }
+    
+    .marquee {
+      color: white;
+      text-align: center;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: bold;
+      font-size: 24px;
+      margin-top: auto;
+      margin-bottom: 20px;
+      white-space: nowrap;
+      animation: marquee 10s linear infinite;
+    }
+    
+    @keyframes marquee {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+    
+    #container {
+      width: 400px;
+      height: 400px;
+      perspective: 800px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+    
+    #cube {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: rotate 10s infinite linear;
+    }
+    
+    .face {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border: 2px solid white;
+      box-sizing: border-box;
+      opacity: 0.9;
+    }
+    
+    .front {
+      background-color: white;
+      transform: translateZ(200px);
+    }
+    
+    .back {
+      background-color: white;
+      transform: translateZ(-200px) rotateY(180deg);
+    }
+    
+    .top {
+      background-color: white;
+      transform: rotateX(90deg) translateZ(200px);
+    }
+    
+    .bottom {
+      background-color: white;
+      transform: rotateX(-90deg) translateZ(200px);
+    }
+    
+    .left {
+      background-color: white;
+      transform: rotateY(-90deg) translateZ(200px);
+    }
+    
+    .right {
+      background-color: white;
+      transform: rotateY(90deg) translateZ(200px);
+    }
+    
+    .pyramid .face {
+      border-color: transparent;
+    }
+    
+    .pyramid .front {
+      background-color: white;
+      transform: translateZ(200px);
+    }
+    
+    .pyramid .back {
+      background-color: transparent;
+      transform: translateZ(-200px) rotateY(180deg);
+    }
+    
+    .pyramid .top {
+      background-color: white;
+      transform: rotateX(60deg) translateZ(200px);
+    }
+    
+    .pyramid .bottom {
+      background-color: white;
+      transform: rotateX(180deg) translateZ(0);
+    }
+    
+    .pyramid .left {
+      background-color: white;
+      transform: rotateY(-60deg) translateZ(200px);
+    }
+    
+    .pyramid .right {
+      background-color: white;
+      transform: rotateY(60deg) translateZ(200px);
+    }
+  </style>
+  <script>
+    var clickCount = 0;
+    var geometries = ["cube", "pyramid", "sphere", "random"];
+    var geometryColors = ["#e74c3c", "#3498db", "#2ecc71", "#9b59b6", "#f1c40f", "#e67e22"];
+    var backgroundColors = ["#1abc9c", "#f39c12", "#c0392b", "#27ae60", "#2980b9", "#8e44ad"];
+    
+    var drawing = false;
+    var drawingInterrupted = false;
+    
+    function startDrawing() {
+      drawing = true;
+      drawingInterrupted = false;
+    }
+    
+    function stopDrawing() {
+      drawing = false;
+    }
+    
+    function draw(event) {
+      if (drawing) {
+        var x = event.clientX;
+        var y = event.clientY;
+        
+        var cube = document.getElementById("cube");
+        var canvas = document.createElement("canvas");
+        var rect = cube.getBoundingClientRect();
+        var brushSize = 10;
+        var brushColor = "black";
+        var canvasX = x - rect.left;
+        var canvasY = y - rect.top;
+        
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        canvas.style.position = "absolute";
+        canvas.style.top = "0";
+        canvas.style.left = "0";
+        canvas.style.pointerEvents = "none";
+        
+        cube.appendChild(canvas);
+        
+        var ctx = canvas.getContext("2d");
+        
+        ctx.fillStyle = brushColor;
+        ctx.fillRect(canvasX - brushSize / 2, canvasY - brushSize / 2, brushSize, brushSize);
+        
+        drawingInterrupted = true;
+      }
+    }
+    
+    function changeToPyramid() {
+      var cube = document.getElementById("cube");
+      cube.className = "pyramid";
+    }
+    
+    function render() {
+      var cube = document.getElementById("cube");
+      var faces = cube.getElementsByClassName("face");
+      
+      var randomGeometry = geometries[Math.floor(Math.random() * geometries.length)];
+      cube.className = randomGeometry;
+      
+      if (randomGeometry !== "random") {
+        var geometryColor = geometryColors[Math.floor(Math.random() * geometryColors.length)];
+        for (var i = 0; i < faces.length; i++) {
+          faces[i].style.backgroundColor = geometryColor;
+          faces[i].style.borderColor = "white";
+        }
+      }
+      
+      var backgroundColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
+      cube.style.backgroundColor = backgroundColor;
+      document.body.style.backgroundColor = backgroundColor;
+      
+      clickCount++;
+      
+      if (clickCount % 5 === 0) {
+        changeToPyramid();
+      }
+    }
+    
+    setTimeout(changeToPyramid, 20000);
+  </script>
+</head>
+<body>
+  <div id="container">
+    <div id="cube" class="cube">
+      <div class="face front"></div>
+      <div class="face back"></div>
+      <div class="face top"></div>
+      <div class="face bottom"></div>
+      <div class="face left"></div>
+      <div class="face right"></div>
+    </div>
+  </div>
+  <div class="marquee-container">
+    <div class="marquee">
+      <span>VRCH / VRCHITECT / VRCH</span>
+    </div>
+  </div>
+  
+  <script>
+    var cube = document.getElementById("cube");
+    cube.addEventListener("click", render);
+    
+    document.addEventListener("mousedown", startDrawing);
+    document.addEventListener("mouseup", stopDrawing);
+    document.addEventListener("mousemove", draw);
+  </script>
+</body>
+</html>
