@@ -1,2 +1,1 @@
-# vrch.github.io
-VRCHITECT
+https://masostuni.github.io/vrch.github.io/
