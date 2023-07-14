@@ -1,227 +1,168 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Gioco Elementi Geometrici</title>
+  <title>VRCHITECT Game</title>
   <style>
-    /* Stili per il container del gioco */
     body {
-      margin: 0;
-      padding: 0;
-    }
-
-    /* Stili per l'header */
-    header {
-      width: 100%;
-      height: 50px;
       background-color: black;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: white;
+    }
+    
+    #container {
+      width: 400px;
+      height: 400px;
+      perspective: 800px;
       display: flex;
       justify-content: center;
       align-items: center;
-      position: fixed;
-      top: 0;
-      left: 0;
+      margin-top: auto;
+      margin-bottom: auto;
+      position: relative;
       z-index: 1;
     }
-
-    /* Stili per il pulsante */
-    #link-button {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 200px;
-      height: 50px;
-      background-color: red;
-      color: white;
-      font-size: 18px;
-      border: none;
-      border-radius: 5px;
-      position: fixed;
-      bottom: 10px;
-      left: calc(50% - 100px);
-      transition: background-color 0.3s ease;
-    }
-
-    #link-button.enabled {
-      background-color: green;
-      cursor: pointer;
-    }
-
-    /* Stili per il container dei cerchi */
-    #game-container {
+    
+    #cube {
       width: 100%;
-      height: calc(100vh - 60px);
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      background-color: black;
+      height: 100%;
       position: relative;
-      flex-wrap: wrap;
+      transform-style: preserve-3d;
+      animation: rotate 20s infinite linear;
+      opacity: 0.5;
     }
-
-    /* Stili per gli elementi geometrici */
-    .shape {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      position: relative;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      border: 4px solid white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    
+    .face {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border: 2px solid white;
+      box-sizing: border-box;
+      opacity: 0.9;
     }
-
-    /* Stili per il testo all'interno dei cerchi */
-    .shape span {
+    
+    .front {
+      background-color: white;
+      transform: translateZ(200px);
+    }
+    
+    .back {
+      background-color: white;
+      transform: translateZ(-200px) rotateY(180deg);
+    }
+    
+    .top {
+      background-color: white;
+      transform: rotateX(90deg) translateZ(200px);
+    }
+    
+    .bottom {
+      background-color: white;
+      transform: rotateX(-90deg) translateZ(200px);
+    }
+    
+    .left {
+      background-color: white;
+      transform: rotateY(-90deg) translateZ(200px);
+    }
+    
+    .right {
+      background-color: white;
+      transform: rotateY(90deg) translateZ(200px);
+    }
+    
+    /* Stili per il gioco */
+    .game-button {
+      padding: 10px 20px;
+      background-color: transparent;
       color: white;
-      font-size: 24px;
+      border: none;
+      font-size: 16px;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      cursor: pointer;
+    }
+    
+    .game-button:hover {
+      background-color: rgba(255, 255, 255, 0.3);
     }
   </style>
-</head>
-<body>
-  <header>
-    <button id="link-button" disabled>vrchitect</button>
-  </header>
-  <div id="game-container"></div>
-
   <script>
-    var isMusicPlaying = false;
+    var clickCount = 0;
+    var letters = ["V", "R", "C", "H"];
     var letterIndex = 0;
-    var expectedText = 'vrchitect';
-    var shapesText = generateRandomLetters(expectedText);
-    var isGameWon = false;
-
-    // Funzione per generare una sequenza casuale di lettere
-    function generateRandomLetters(expectedText) {
-      var letters = expectedText.split('');
-      var randomLetters = letters.slice();
-      var randomIndex = Math.floor(Math.random() * randomLetters.length);
-      randomLetters[randomIndex] = getRandomLetter(expectedText[letterIndex]);
-      return randomLetters;
+    var axis = "X";
+    
+    function render() {
+      var cube = document.getElementById("cube");
+      var faces = cube.getElementsByClassName("face");
+      
+      var randomGeometry = Math.floor(Math.random() * 3); // Random geometry index: 0, 1, or 2
+      cube.className = "geometry-" + randomGeometry;
+      
+      var backgroundColor = getRandomColor();
+      cube.style.backgroundColor = backgroundColor;
+      document.body.style.backgroundColor = backgroundColor;
+      
+      clickCount++;
+      
+      if (clickCount > 4) {
+        location.href = "https://oncyber.io/spaces/DSUTHtsMOuAnVfZc67rI"; // Redirect to the link
+      } else {
+        var letter = letters[letterIndex];
+        letterIndex++;
+        
+        var canvas = document.createElement("canvas");
+        canvas.width = 400;
+        canvas.height = 400;
+        var ctx = canvas.getContext("2d");
+        ctx.font = "bold 200px Arial";
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(letter, canvas.width / 2, canvas.height / 2);
+        
+        for (var i = 0; i < faces.length; i++) {
+          faces[i].style.backgroundImage = "url(" + canvas.toDataURL() + ")";
+          faces[i].style.backgroundRepeat = "no-repeat";
+          faces[i].style.backgroundPosition = "center";
+        }
+        
+        // Cambia l'asse di rotazione
+        axis = axis === "X" ? "Y" : "X";
+        cube.style.animation = `rotate 20s infinite linear ${axis}`;
+      }
     }
-
-    // Funzione per ottenere la lettera successiva
-    function getNextLetter(currentLetter) {
-      var alphabet = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase();
-      var currentIndex = alphabet.indexOf(currentLetter);
-      var nextIndex = (currentIndex + 1) % alphabet.length;
-      return alphabet[nextIndex];
-    }
-
-    // Funzione per generare un colore casuale in formato esadecimale
+    
     function getRandomColor() {
-      var letters = '0123456789ABCDEF';
-      var color = '#';
+      var letters = "0123456789ABCDEF";
+      var color = "#";
       for (var i = 0; i < 6; i++) {
         color += letters[Math.floor(Math.random() * 16)];
       }
       return color;
     }
-
-    // Funzione per ottenere una lettera casuale diversa da quella corretta
-    function getRandomLetter(currentLetter) {
-      var randomLetter = currentLetter;
-      while (randomLetter.toUpperCase() === currentLetter.toUpperCase()) {
-        randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
-      }
-      return randomLetter;
-    }
-
-    // Funzione per gestire il tocco sugli elementi geometrici
-    function handleTouch(event) {
-      if (isGameWon) {
-        return;
-      }
-
-      var shape = event.target;
-
-      if (!isMusicPlaying) {
-        var audio = new Audio('Fotonovela.mp3');
-        audio.play();
-        isMusicPlaying = true;
-      }
-
-      var clickedLetter = shape.textContent.toUpperCase();
-
-      if (clickedLetter === expectedText[letterIndex].toUpperCase()) {
-        shape.style.backgroundColor = getRandomColor();
-        shape.style.color = 'white';
-
-        letterIndex++;
-
-        if (letterIndex === expectedText.length) {
-          isGameWon = true;
-
-          var linkButton = document.getElementById('link-button');
-          linkButton.classList.add('enabled');
-          linkButton.disabled = false;
-        }
-        else {
-          shapesText = generateRandomLetters(expectedText);
-          updateShapes();
-        }
-      } else {
-        shape.classList.add('wrong-letter');
-        setTimeout(function() {
-          shape.classList.remove('wrong-letter');
-        }, 500);
-      }
-    }
-
-    // Funzione per aprire il link
-    function openLink() {
-      if (isGameWon) {
-        window.location.href = 'https://oncyber.io/spaces/DSUTHtsMOuAnVfZc67rI';
-      }
-    }
-
-    // Funzione per creare gli elementi geometrici nel gioco
-    function createShapes() {
-      var gameContainer = document.getElementById('game-container');
-
-      for (var i = 0; i < expectedText.length; i++) {
-        var shape = document.createElement('div');
-        shape.className = 'shape';
-        shape.style.backgroundColor = getRandomColor();
-        shape.style.color = 'white';
-
-        var shapeText = document.createElement('span');
-        shapeText.textContent = shapesText[i].toUpperCase();
-        shape.appendChild(shapeText);
-
-        shape.addEventListener('click', handleTouch);
-        gameContainer.appendChild(shape);
-      }
-    }
-
-    // Funzione per aggiornare gli elementi geometrici con le nuove lettere
-    function updateShapes() {
-      var gameContainer = document.getElementById('game-container');
-      gameContainer.innerHTML = '';
-
-      for (var i = 0; i < expectedText.length; i++) {
-        var shape = document.createElement('div');
-        shape.className = 'shape';
-        shape.style.backgroundColor = getRandomColor();
-        shape.style.color = 'white';
-
-        var shapeText = document.createElement('span');
-        shapeText.textContent = shapesText[i].toUpperCase();
-        shape.appendChild(shapeText);
-
-        shape.addEventListener('click', handleTouch);
-        gameContainer.appendChild(shape);
-      }
-    }
-
-    // Chiamata alla funzione per creare gli elementi geometrici quando la pagina è pronta
-    window.addEventListener('DOMContentLoaded', function() {
-      createShapes();
-
-      var linkButton = document.getElementById('link-button');
-      linkButton.addEventListener('click', openLink);
-    });
   </script>
+</head>
+<body>
+  <div id="container">
+    <div id="cube">
+      <div class="face front"></div>
+      <div class="face back"></div>
+      <div class="face top"></div>
+      <div class="face bottom"></div>
+      <div class="face left"></div>
+      <div class="face right"></div>
+    </div>
+    <button class="game-button" onclick="render()">VRCH</button>
+  </div>
 </body>
 </html>
