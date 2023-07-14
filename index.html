@@ -1,137 +1,227 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>vrch</title>
+  <title>Gioco Elementi Geometrici</title>
   <style>
-    /* CSS styles */
+    /* Stili per il container del gioco */
+    body {
+      margin: 0;
+      padding: 0;
+    }
 
-    /* Rest of the CSS code... */
+    /* Stili per l'header */
+    header {
+      width: 100%;
+      height: 50px;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    /* Stili per il pulsante */
+    #link-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 200px;
+      height: 50px;
+      background-color: red;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      position: fixed;
+      bottom: 10px;
+      left: calc(50% - 100px);
+      transition: background-color 0.3s ease;
+    }
+
+    #link-button.enabled {
+      background-color: green;
+      cursor: pointer;
+    }
+
+    /* Stili per il container dei cerchi */
+    #game-container {
+      width: 100%;
+      height: calc(100vh - 60px);
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      background-color: black;
+      position: relative;
+      flex-wrap: wrap;
+    }
+
+    /* Stili per gli elementi geometrici */
+    .shape {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      border: 4px solid white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Stili per il testo all'interno dei cerchi */
+    .shape span {
+      color: white;
+      font-size: 24px;
+    }
   </style>
-  <script>
-    var clickCount = 0;
-    var geometries = ["cube", "pyramid", "sphere", "random"];
-    var geometryColors = ["#e74c3c", "#3498db", "#2ecc71", "#9b59b6", "#f1c40f", "#e67e22"];
-    var backgroundColors = ["#1abc9c", "#f39c12", "#c0392b", "#27ae60", "#2980b9", "#8e44ad"];
-
-    var drawing = false;
-    var drawingInterrupted = false;
-
-    function startDrawing() {
-      drawing = true;
-      drawingInterrupted = false;
-    }
-
-    function stopDrawing() {
-      drawing = false;
-    }
-
-    function draw(event) {
-      if (drawing) {
-        var x = event.clientX;
-        var y = event.clientY;
-        
-        var cube = document.getElementById("cube");
-        var canvas = document.createElement("canvas");
-        var rect = cube.getBoundingClientRect();
-        var brushSize = 10;
-        var brushColor = "black";
-        var canvasX = x - rect.left;
-        var canvasY = y - rect.top;
-        
-        canvas.width = rect.width;
-        canvas.height = rect.height;
-        canvas.style.position = "absolute";
-        canvas.style.top = "0";
-        canvas.style.left = "0";
-        canvas.style.pointerEvents = "none";
-        
-        cube.appendChild(canvas);
-        
-        var ctx = canvas.getContext("2d");
-        
-        ctx.fillStyle = brushColor;
-        ctx.fillRect(canvasX - brushSize / 2, canvasY - brushSize / 2, brushSize, brushSize);
-        
-        drawingInterrupted = true;
-      }
-    }
-
-    function changeToPyramid() {
-      var cube = document.getElementById("cube");
-      cube.className = "pyramid";
-    }
-
-    function render() {
-      var cube = document.getElementById("cube");
-      var faces = cube.getElementsByClassName("face");
-      
-      clickCount++;
-      
-      if (clickCount === 1) {
-        // Add audio element and play the song after the first click
-        var audio = document.createElement("audio");
-        audio.src = "Fotonovela.mp3";
-        audio.autoplay = true;
-        document.body.appendChild(audio);
-      } else if (clickCount === 5) {
-        changeToPyramid();
-      } else if (clickCount === 10) {
-        cube.className = "sphere";
-      }
-
-      if (clickCount % 5 === 0) {
-        changeToPyramid();
-      }
-
-      var randomGeometry = geometries[Math.floor(Math.random() * geometries.length)];
-      cube.className = randomGeometry;
-      
-      if (randomGeometry !== "random") {
-        var geometryColor = geometryColors[Math.floor(Math.random() * geometryColors.length)];
-        for (var i = 0; i < faces.length; i++) {
-          faces[i].style.backgroundColor = geometryColor;
-          faces[i].style.borderColor = "white";
-        }
-      }
-      
-      var backgroundColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
-      cube.style.backgroundColor = backgroundColor;
-      document.body.style.backgroundColor = backgroundColor;
-    }
-
-    setTimeout(changeToPyramid, 20000);
-  </script>
 </head>
 <body>
-  <div style="position: fixed; top: 10px; left: 10px;">
-    <button onclick="alert('VRCH')">Button 1</button>
-  </div>
-  <div style="position: fixed; top: 10px; right: 10px;">
-    <button onclick="alert('/ VRCHITECT \')">Button 2</button>
-  </div>
-  <div id="container">
-    <div id="cube" class="cube">
-      <div class="face front"></div>
-      <div class="face back"></div>
-      <div class="face top"></div>
-      <div class="face bottom"></div>
-      <div class="face left"></div>
-      <div class="face right"></div>
-    </div>
-  </div>
-  <div class="marquee-container">
-    <div class="marquee">
-      <span>VRCH / VRCHITECT \ VRCH / VRCHITECT \ VRCH / VRCHITECT \ VRCH / VRCHITECT \ VRCH</span>
-    </div>
-  </div>
+  <header>
+    <button id="link-button" disabled>vrchitect</button>
+  </header>
+  <div id="game-container"></div>
 
   <script>
-    var cube = document.getElementById("cube");
-    cube.addEventListener("click", render);
-    
-    document.addEventListener("mousedown", startDrawing);
-    document.addEventListener("mouseup", stopDrawing);
-    document.addEventListener("mousemove", draw);
+    var isMusicPlaying = false;
+    var letterIndex = 0;
+    var expectedText = 'vrchitect';
+    var shapesText = generateRandomLetters(expectedText);
+    var isGameWon = false;
+
+    // Funzione per generare una sequenza casuale di lettere
+    function generateRandomLetters(expectedText) {
+      var letters = expectedText.split('');
+      var randomLetters = letters.slice();
+      var randomIndex = Math.floor(Math.random() * randomLetters.length);
+      randomLetters[randomIndex] = getRandomLetter(expectedText[letterIndex]);
+      return randomLetters;
+    }
+
+    // Funzione per ottenere la lettera successiva
+    function getNextLetter(currentLetter) {
+      var alphabet = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase();
+      var currentIndex = alphabet.indexOf(currentLetter);
+      var nextIndex = (currentIndex + 1) % alphabet.length;
+      return alphabet[nextIndex];
+    }
+
+    // Funzione per generare un colore casuale in formato esadecimale
+    function getRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    // Funzione per ottenere una lettera casuale diversa da quella corretta
+    function getRandomLetter(currentLetter) {
+      var randomLetter = currentLetter;
+      while (randomLetter.toUpperCase() === currentLetter.toUpperCase()) {
+        randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+      }
+      return randomLetter;
+    }
+
+    // Funzione per gestire il tocco sugli elementi geometrici
+    function handleTouch(event) {
+      if (isGameWon) {
+        return;
+      }
+
+      var shape = event.target;
+
+      if (!isMusicPlaying) {
+        var audio = new Audio('Fotonovela.mp3');
+        audio.play();
+        isMusicPlaying = true;
+      }
+
+      var clickedLetter = shape.textContent.toUpperCase();
+
+      if (clickedLetter === expectedText[letterIndex].toUpperCase()) {
+        shape.style.backgroundColor = getRandomColor();
+        shape.style.color = 'white';
+
+        letterIndex++;
+
+        if (letterIndex === expectedText.length) {
+          isGameWon = true;
+
+          var linkButton = document.getElementById('link-button');
+          linkButton.classList.add('enabled');
+          linkButton.disabled = false;
+        }
+        else {
+          shapesText = generateRandomLetters(expectedText);
+          updateShapes();
+        }
+      } else {
+        shape.classList.add('wrong-letter');
+        setTimeout(function() {
+          shape.classList.remove('wrong-letter');
+        }, 500);
+      }
+    }
+
+    // Funzione per aprire il link
+    function openLink() {
+      if (isGameWon) {
+        window.location.href = 'https://oncyber.io/spaces/DSUTHtsMOuAnVfZc67rI';
+      }
+    }
+
+    // Funzione per creare gli elementi geometrici nel gioco
+    function createShapes() {
+      var gameContainer = document.getElementById('game-container');
+
+      for (var i = 0; i < expectedText.length; i++) {
+        var shape = document.createElement('div');
+        shape.className = 'shape';
+        shape.style.backgroundColor = getRandomColor();
+        shape.style.color = 'white';
+
+        var shapeText = document.createElement('span');
+        shapeText.textContent = shapesText[i].toUpperCase();
+        shape.appendChild(shapeText);
+
+        shape.addEventListener('click', handleTouch);
+        gameContainer.appendChild(shape);
+      }
+    }
+
+    // Funzione per aggiornare gli elementi geometrici con le nuove lettere
+    function updateShapes() {
+      var gameContainer = document.getElementById('game-container');
+      gameContainer.innerHTML = '';
+
+      for (var i = 0; i < expectedText.length; i++) {
+        var shape = document.createElement('div');
+        shape.className = 'shape';
+        shape.style.backgroundColor = getRandomColor();
+        shape.style.color = 'white';
+
+        var shapeText = document.createElement('span');
+        shapeText.textContent = shapesText[i].toUpperCase();
+        shape.appendChild(shapeText);
+
+        shape.addEventListener('click', handleTouch);
+        gameContainer.appendChild(shape);
+      }
+    }
+
+    // Chiamata alla funzione per creare gli elementi geometrici quando la pagina è pronta
+    window.addEventListener('DOMContentLoaded', function() {
+      createShapes();
+
+      var linkButton = document.getElementById('link-button');
+      linkButton.addEventListener('click', openLink);
+    });
   </script>
 </body>
 </html>
