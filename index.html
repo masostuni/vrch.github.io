@@ -3,154 +3,28 @@
 <head>
   <title>vrch</title>
   <style>
-    body {
-      background-color: black;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      color: white;
-    }
-    
-    .marquee-container {
-      width: 100%;
-      overflow: hidden;
-    }
-    
-    .marquee {
-      color: white;
-      text-align: center;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-weight: bold;
-      font-size: 24px;
-      margin-top: auto;
-      margin-bottom: 20px;
-      white-space: nowrap;
-      animation: marquee 10s linear infinite;
-    }
-    
-    @keyframes marquee {
-      0% {
-        transform: translateX(100%);
-      }
-      100% {
-        transform: translateX(-100%);
-      }
-    }
-    
-    #container {
-      width: 400px;
-      height: 400px;
-      perspective: 800px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: auto;
-      margin-bottom: auto;
-    }
-    
-    #cube {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      animation: rotate 10s infinite linear;
-    }
-    
-    .face {
-      position: absolute;
-      width: 400px;
-      height: 400px;
-      border: 2px solid white;
-      box-sizing: border-box;
-      opacity: 0.9;
-    }
-    
-    .front {
-      background-color: white;
-      transform: translateZ(200px);
-    }
-    
-    .back {
-      background-color: white;
-      transform: translateZ(-200px) rotateY(180deg);
-    }
-    
-    .top {
-      background-color: white;
-      transform: rotateX(90deg) translateZ(200px);
-    }
-    
-    .bottom {
-      background-color: white;
-      transform: rotateX(-90deg) translateZ(200px);
-    }
-    
-    .left {
-      background-color: white;
-      transform: rotateY(-90deg) translateZ(200px);
-    }
-    
-    .right {
-      background-color: white;
-      transform: rotateY(90deg) translateZ(200px);
-    }
-    
-    .pyramid .face {
-      border-color: transparent;
-    }
-    
-    .pyramid .front {
-      background-color: white;
-      transform: translateZ(200px);
-    }
-    
-    .pyramid .back {
-      background-color: transparent;
-      transform: translateZ(-200px) rotateY(90deg);
-    }
-    
-    .pyramid .top {
-      background-color: white;
-      transform: rotateX(60deg) translateZ(200px);
-    }
-    
-    .pyramid .bottom {
-      background-color: white;
-      transform: rotateX(90deg) translateZ(0);
-    }
-    
-    .pyramid .left {
-      background-color: white;
-      transform: rotateY(-60deg) translateZ(200px);
-    }
-    
-    .pyramid .right {
-      background-color: white;
-      transform: rotateY(60deg) translateZ(200px);
-    }
+    /* CSS styles */
+
+    /* Rest of the CSS code... */
   </style>
   <script>
     var clickCount = 0;
     var geometries = ["cube", "pyramid", "sphere", "random"];
     var geometryColors = ["#e74c3c", "#3498db", "#2ecc71", "#9b59b6", "#f1c40f", "#e67e22"];
     var backgroundColors = ["#1abc9c", "#f39c12", "#c0392b", "#27ae60", "#2980b9", "#8e44ad"];
-    
+
     var drawing = false;
     var drawingInterrupted = false;
-    
+
     function startDrawing() {
       drawing = true;
       drawingInterrupted = false;
     }
-    
+
     function stopDrawing() {
       drawing = false;
     }
-    
+
     function draw(event) {
       if (drawing) {
         var x = event.clientX;
@@ -181,16 +55,34 @@
         drawingInterrupted = true;
       }
     }
-    
+
     function changeToPyramid() {
       var cube = document.getElementById("cube");
       cube.className = "pyramid";
     }
-    
+
     function render() {
       var cube = document.getElementById("cube");
       var faces = cube.getElementsByClassName("face");
       
+      clickCount++;
+      
+      if (clickCount === 1) {
+        // Add audio element and play the song after the first click
+        var audio = document.createElement("audio");
+        audio.src = "path/to/song.mp3";
+        audio.autoplay = true;
+        document.body.appendChild(audio);
+      } else if (clickCount === 5) {
+        changeToPyramid();
+      } else if (clickCount === 10) {
+        cube.className = "sphere";
+      }
+
+      if (clickCount % 5 === 0) {
+        changeToPyramid();
+      }
+
       var randomGeometry = geometries[Math.floor(Math.random() * geometries.length)];
       cube.className = randomGeometry;
       
@@ -205,18 +97,18 @@
       var backgroundColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
       cube.style.backgroundColor = backgroundColor;
       document.body.style.backgroundColor = backgroundColor;
-      
-      clickCount++;
-      
-      if (clickCount % 5 === 0) {
-        changeToPyramid();
-      }
     }
-    
+
     setTimeout(changeToPyramid, 20000);
   </script>
 </head>
 <body>
+  <div style="position: fixed; top: 10px; left: 10px;">
+    <button onclick="alert('Button 1 clicked!')">Button 1</button>
+  </div>
+  <div style="position: fixed; top: 10px; right: 10px;">
+    <button onclick="alert('Button 2 clicked!')">Button 2</button>
+  </div>
   <div id="container">
     <div id="cube" class="cube">
       <div class="face front"></div>
@@ -232,7 +124,7 @@
       <span>VRCH / VRCHITECT / VRCH</span>
     </div>
   </div>
-  
+
   <script>
     var cube = document.getElementById("cube");
     cube.addEventListener("click", render);
