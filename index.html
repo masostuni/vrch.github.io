@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VRCHITECT</title>
     <style>
         body {
@@ -16,7 +18,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             perspective: 800px;
-            z-index: 1; /* Assicura che il contenitore sia sopra al cubo */
+            z-index: 1;
         }
 
         #cube {
@@ -25,7 +27,7 @@
             position: relative;
             transform-style: preserve-3d;
             animation: rotateCube 10s linear infinite;
-            z-index: 0; /* Assicura che il cubo sia dietro al testo */
+            z-index: 0;
         }
 
         .face {
@@ -75,7 +77,7 @@
             font-size: 20px;
             border: 2px solid white;
             cursor: pointer;
-            z-index: 2; /* Assicura che i pulsanti siano sopra al testo */
+            z-index: 2;
         }
 
         #vrchitect-button-1 {
@@ -100,14 +102,14 @@
             font-size: 20px;
             border: 2px solid white;
             cursor: pointer;
-            z-index: 2; /* Assicura che i pulsanti siano sopra al testo */
+            z-index: 2;
         }
 
         #text {
             position: fixed;
-            top: 0;
+            bottom: 0;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) translateY(100%);
             padding: 20px;
             box-sizing: border-box;
             color: white;
@@ -115,16 +117,15 @@
             font-size: 16px;
             line-height: 1.6;
             opacity: 0;
-            transition: opacity 0.5s ease; /* Effetto di dissolvenza del testo */
-            z-index: 1; /* Assicura che il testo sia sopra al cubo e sotto ai pulsanti */
-            max-width: 80%; /* Larghezza massima del testo */
-            pointer-events: none; /* Il testo non è cliccabile */
+            transition: opacity 0.5s ease;
+            z-index: 1;
+            max-width: 80%;
+            pointer-events: none;
         }
 
         body.scroll-down #text {
             opacity: 1;
         }
-
     </style>
 </head>
 <body>
@@ -189,6 +190,46 @@
         function openLink2() {
             window.open('https://instagram.com/marco_vrchitect');
         }
+
+        var isScrolling = false;
+
+        function scrollHandler() {
+            isScrolling = true;
+            checkScrollDirection();
+            setTimeout(function() {
+                isScrolling = false;
+            }, 200);
+        }
+
+        document.addEventListener('scroll', scrollHandler);
+
+        function checkScrollDirection() {
+            if (!isScrolling) {
+                var newScrollPosition = window.scrollY || document.documentElement.scrollTop;
+                if (newScrollPosition > scrollPosition) {
+                    // Scorrimento verso il basso
+                    document.body.classList.add('scroll-down');
+                    text.style.transform = "translateX(-50%) translateY(0%)"; // Sposta il testo in avanti
+                } else {
+                    // Scorrimento verso l'alto
+                    document.body.classList.remove('scroll-down');
+                    text.style.transform = "translateX(-50%) translateY(100%)"; // Sposta il testo indietro
+                }
+                scrollPosition = newScrollPosition;
+            }
+        }
+
+        window.addEventListener('wheel', function(e) {
+            if (e.deltaY < 0) {
+                // Scorrimento verso l'alto
+                document.body.classList.remove('scroll-down');
+                text.style.transform = "translateX(-50%) translateY(100%)";
+            } else {
+                // Scorrimento verso il basso
+                document.body.classList.add('scroll-down');
+                text.style.transform = "translateX(-50%) translateY(0%)";
+            }
+        });
     </script>
 </body>
 </html>
