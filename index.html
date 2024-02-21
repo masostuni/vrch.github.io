@@ -72,6 +72,7 @@
             font-size: 20px;
             border: 2px solid white;
             cursor: pointer;
+            transition: all 2s ease; /* Effetto di scorrimento lento */
         }
 
         #vrchitect-button-1 {
@@ -96,7 +97,25 @@
             font-size: 20px;
             border: 2px solid white;
             cursor: pointer;
+            transition: all 2s ease; /* Effetto di scorrimento lento */
         }
+
+        #text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            opacity: 0.8;
+            overflow-y: auto;
+            max-height: 80%;
+        }
+
     </style>
 </head>
 <body>
@@ -111,6 +130,18 @@
             <div class="face top"></div>
             <div class="face bottom"></div>
         </div>
+    </div>
+
+    <div id="text">
+        <p>
+            La figura dell'architetto virtuale, nel contesto italiano, si occupa della progettazione di ambienti digitali immersivi che coinvolgono gli utenti e creano interazioni memorabili. Che si tratti di realizzare mondi virtuali per l'intrattenimento, simulazioni educative o visualizzazioni architettoniche, un architetto virtuale combina elementi dell'architettura tradizionale, del design dell'esperienza utente e della tecnologia per creare spazi virtuali convincenti.
+
+            Gli architetti virtuali utilizzano una varietà di strumenti e tecniche, tra cui software di modellazione 3D, tecnologia di realtà virtuale (VR), applicazioni di realtà aumentata (AR) e metodi di narrazione interattiva. Devono considerare fattori come il layout spaziale, l'illuminazione, le texture, il suono e il design dell'interfaccia utente per garantire che l'esperienza virtuale sia sia esteticamente piacevole che funzionale.
+
+            Oltre alle competenze tecniche, gli architetti virtuali devono avere una solida comprensione del comportamento umano e della psicologia per progettare esperienze che risuonino con gli utenti a livello emotivo. Ciò potrebbe comportare l'inclusione di elementi narrativi, sorprese ed esplorazione nell'ambiente virtuale per mantenere gli utenti coinvolti e divertiti.
+
+            Complessivamente, gli architetti virtuali svolgono un ruolo cruciale nel plasmare il futuro delle esperienze digitali, spingendo i confini di ciò che è possibile nei mondi virtuali e creando nuove opportunità per l'espressione creativa e l'interazione.
+        </p>
     </div>
 
     <button id="cube-button" onclick="openLink2()">VRCHITECT</button>
@@ -156,11 +187,7 @@
         function openLink1() {
             window.open("https://api.whatsapp.com/send?phone=393492709028");
         }
-        
-        function openCubeLink() {
-            alert(+393492709028);
-        }
-        
+
         function openLink2() {
             window.open('https://instagram.com/marco_vrchitect');
         }
