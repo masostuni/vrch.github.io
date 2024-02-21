@@ -7,6 +7,7 @@
             background-color: black;
             overflow: hidden;
             margin: 0;
+            color: white;
         }
 
         #container {
@@ -15,6 +16,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             perspective: 800px;
+            z-index: 1; /* Assicura che il contenitore sia sopra al cubo */
         }
 
         #cube {
@@ -23,6 +25,7 @@
             position: relative;
             transform-style: preserve-3d;
             animation: rotateCube 10s linear infinite;
+            z-index: 0; /* Assicura che il cubo sia dietro al testo */
         }
 
         .face {
@@ -72,7 +75,7 @@
             font-size: 20px;
             border: 2px solid white;
             cursor: pointer;
-            transition: all 2s ease; /* Effetto di scorrimento lento */
+            z-index: 2; /* Assicura che i pulsanti siano sopra al testo */
         }
 
         #vrchitect-button-1 {
@@ -97,23 +100,29 @@
             font-size: 20px;
             border: 2px solid white;
             cursor: pointer;
-            transition: all 2s ease; /* Effetto di scorrimento lento */
+            z-index: 2; /* Assicura che i pulsanti siano sopra al testo */
         }
 
         #text {
-            position: absolute;
+            position: fixed;
             top: 0;
-            left: 0;
-            width: 100%;
+            left: 50%;
+            transform: translateX(-50%);
             padding: 20px;
             box-sizing: border-box;
             color: white;
             font-family: Arial, sans-serif;
             font-size: 16px;
             line-height: 1.6;
-            opacity: 0.8;
-            overflow-y: auto;
-            max-height: 80%;
+            opacity: 0;
+            transition: opacity 0.5s ease; /* Effetto di dissolvenza del testo */
+            z-index: 1; /* Assicura che il testo sia sopra al cubo e sotto ai pulsanti */
+            max-width: 80%; /* Larghezza massima del testo */
+            pointer-events: none; /* Il testo non è cliccabile */
+        }
+
+        body.scroll-down #text {
+            opacity: 1;
         }
 
     </style>
@@ -134,9 +143,9 @@
 
     <div id="text">
         <p>
-            La figura dell'architetto virtuale, nel contesto italiano, si occupa della progettazione di ambienti digitali immersivi che coinvolgono gli utenti e creano interazioni memorabili. Che si tratti di realizzare mondi virtuali per l'intrattenimento, simulazioni educative o visualizzazioni architettoniche, un architetto virtuale combina elementi dell'architettura tradizionale, del design dell'esperienza utente e della tecnologia per creare spazi virtuali convincenti.
+            La figura dell'architetto virtuale, si occupa della progettazione di ambienti digitali immersivi che coinvolgono gli utenti e creano interazioni memorabili. Che si tratti di realizzare mondi virtuali per l'intrattenimento, simulazioni educative o visualizzazioni architettoniche, un architetto virtuale combina elementi dell'architettura tradizionale, del design dell'esperienza utente e della tecnologia per creare spazi virtuali convincenti.
 
-            Gli architetti virtuali utilizzano una varietà di strumenti e tecniche, tra cui software di modellazione 3D, tecnologia di realtà virtuale (VR), applicazioni di realtà aumentata (AR) e metodi di narrazione interattiva. Devono considerare fattori come il layout spaziale, l'illuminazione, le texture, il suono e il design dell'interfaccia utente per garantire che l'esperienza virtuale sia sia esteticamente piacevole che funzionale.
+            Gli architetti virtuali utilizzano una varietà di strumenti e tecniche, tra cui software di modellazione 3D, tecnologia di Realtà Virtuale, applicazioni di realtà aumentata (AR) e metodi di narrazione interattiva. Devono considerare fattori come il layout spaziale, l'illuminazione, le texture, il suono e il design dell'interfaccia utente per garantire che l'esperienza virtuale sia sia esteticamente piacevole che funzionale.
 
             Oltre alle competenze tecniche, gli architetti virtuali devono avere una solida comprensione del comportamento umano e della psicologia per progettare esperienze che risuonino con gli utenti a livello emotivo. Ciò potrebbe comportare l'inclusione di elementi narrativi, sorprese ed esplorazione nell'ambiente virtuale per mantenere gli utenti coinvolti e divertiti.
 
@@ -150,35 +159,24 @@
 
     <script>
         var cube = document.getElementById('cube');
-        var scrollCounter = 0;
+        var text = document.getElementById('text');
+        var scrollPosition = window.scrollY || document.documentElement.scrollTop;
 
-        function getRandomColor() {
-            var letters = '0123456789ABCDEF';
-            var color = '#';
-            for (var i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
+        function checkScrollDirection() {
+            var newScrollPosition = window.scrollY || document.documentElement.scrollTop;
+            if (newScrollPosition > scrollPosition) {
+                // Scorrimento verso il basso
+                document.body.classList.add('scroll-down');
+                text.style.transform = "translateX(-50%) translateY(0%)"; // Sposta il testo in avanti
+            } else {
+                // Scorrimento verso l'alto
+                document.body.classList.remove('scroll-down');
+                text.style.transform = "translateX(-50%) translateY(100%)"; // Sposta il testo indietro
             }
-            return color;
+            scrollPosition = newScrollPosition;
         }
 
-        function changeColors() {
-            scrollCounter++;
-            if (scrollCounter % 5 === 0) {
-                var randomColor = getRandomColor();
-                var randomBorderColor = getRandomColor();
-
-                cube.style.backgroundColor = randomColor;
-                cube.style.borderColor = randomBorderColor;
-
-                var buttons = document.getElementsByClassName('vrchitect-button');
-                for (var i = 0; i < buttons.length; i++) {
-                    buttons[i].style.color = randomColor;
-                    buttons[i].style.borderColor = randomBorderColor;
-                }
-            }
-        }
-
-        document.addEventListener('scroll', changeColors);
+        document.addEventListener('scroll', checkScrollDirection);
 
         function openLink() {
             window.open('https://oncyber.io/spaces/DSUTHtsMOuAnVfZc67rI', '_blank');
