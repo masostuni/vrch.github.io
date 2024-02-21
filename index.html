@@ -10,6 +10,7 @@
             overflow: hidden;
             margin: 0;
             color: white;
+            font-family: Arial, sans-serif;
         }
 
         #container {
@@ -73,7 +74,6 @@
             padding: 10px 20px;
             background-color: transparent;
             color: white;
-            font-family: Arial, sans-serif;
             font-size: 20px;
             border: 2px solid white;
             cursor: pointer;
@@ -98,7 +98,6 @@
             padding: 10px 20px;
             background-color: transparent;
             color: white;
-            font-family: Arial, sans-serif;
             font-size: 20px;
             border: 2px solid white;
             cursor: pointer;
@@ -109,18 +108,17 @@
             position: fixed;
             bottom: 0;
             left: 50%;
-            transform: translateX(-50%) translateY(100%);
+            transform: translateX(-50%);
             padding: 20px;
             box-sizing: border-box;
             color: white;
-            font-family: Arial, sans-serif;
             font-size: 16px;
             line-height: 1.6;
             opacity: 0;
             transition: opacity 0.5s ease;
             z-index: 1;
             max-width: 80%;
-            pointer-events: none;
+            white-space: nowrap; /* Per far scorrere il testo su una sola linea */
         }
 
         body.scroll-down #text {
@@ -168,11 +166,11 @@
             if (newScrollPosition > scrollPosition) {
                 // Scorrimento verso il basso
                 document.body.classList.add('scroll-down');
-                text.style.transform = "translateX(-50%) translateY(0%)"; // Sposta il testo in avanti
+                text.style.opacity = "1"; // Mostra il testo
             } else {
                 // Scorrimento verso l'alto
                 document.body.classList.remove('scroll-down');
-                text.style.transform = "translateX(-50%) translateY(100%)"; // Sposta il testo indietro
+                text.style.opacity = "0"; // Nascondi il testo
             }
             scrollPosition = newScrollPosition;
         }
@@ -190,46 +188,6 @@
         function openLink2() {
             window.open('https://instagram.com/marco_vrchitect');
         }
-
-        var isScrolling = false;
-
-        function scrollHandler() {
-            isScrolling = true;
-            checkScrollDirection();
-            setTimeout(function() {
-                isScrolling = false;
-            }, 200);
-        }
-
-        document.addEventListener('scroll', scrollHandler);
-
-        function checkScrollDirection() {
-            if (!isScrolling) {
-                var newScrollPosition = window.scrollY || document.documentElement.scrollTop;
-                if (newScrollPosition > scrollPosition) {
-                    // Scorrimento verso il basso
-                    document.body.classList.add('scroll-down');
-                    text.style.transform = "translateX(-50%) translateY(0%)"; // Sposta il testo in avanti
-                } else {
-                    // Scorrimento verso l'alto
-                    document.body.classList.remove('scroll-down');
-                    text.style.transform = "translateX(-50%) translateY(100%)"; // Sposta il testo indietro
-                }
-                scrollPosition = newScrollPosition;
-            }
-        }
-
-        window.addEventListener('wheel', function(e) {
-            if (e.deltaY < 0) {
-                // Scorrimento verso l'alto
-                document.body.classList.remove('scroll-down');
-                text.style.transform = "translateX(-50%) translateY(100%)";
-            } else {
-                // Scorrimento verso il basso
-                document.body.classList.add('scroll-down');
-                text.style.transform = "translateX(-50%) translateY(0%)";
-            }
-        });
     </script>
 </body>
 </html>
