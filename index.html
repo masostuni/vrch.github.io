@@ -1,16 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VRCHITECT</title>
     <style>
         body {
             background-color: black;
             overflow: hidden;
             margin: 0;
-            color: white;
-            font-family: Arial, sans-serif;
         }
 
         #container {
@@ -19,7 +15,6 @@
             left: 50%;
             transform: translate(-50%, -50%);
             perspective: 800px;
-            z-index: 1;
         }
 
         #cube {
@@ -28,7 +23,6 @@
             position: relative;
             transform-style: preserve-3d;
             animation: rotateCube 10s linear infinite;
-            z-index: 0;
         }
 
         .face {
@@ -74,10 +68,10 @@
             padding: 10px 20px;
             background-color: transparent;
             color: white;
+            font-family: Arial, sans-serif;
             font-size: 20px;
             border: 2px solid white;
             cursor: pointer;
-            z-index: 2;
         }
 
         #vrchitect-button-1 {
@@ -98,31 +92,10 @@
             padding: 10px 20px;
             background-color: transparent;
             color: white;
+            font-family: Arial, sans-serif;
             font-size: 20px;
             border: 2px solid white;
             cursor: pointer;
-            z-index: 2;
-        }
-
-        #text {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 20px;
-            box-sizing: border-box;
-            color: white;
-            font-size: 16px;
-            line-height: 1.6;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            z-index: 1;
-            max-width: 80%;
-            white-space: nowrap; /* Per far scorrere il testo su una sola linea */
-        }
-
-        body.scroll-down #text {
-            opacity: 1;
         }
     </style>
 </head>
@@ -140,42 +113,41 @@
         </div>
     </div>
 
-    <div id="text">
-        <p>
-            La figura dell'architetto virtuale, progetta ambienti digitali immersivi per l'intrattenimento, simulazioni educative o visualizzazioni architettoniche, combinando elementi dell'architettura tradizionale, del design dell'esperienza utente e della tecnologia per creare spazi virtuali convincenti.
-
-            Gli architetti virtuali utilizzano una varietà di strumenti e tecniche, tra cui software di modellazione 3D, tecnologia di Realtà Virtuale, applicazioni di realtà aumentata (AR) e metodi di narrazione interattiva.
-           
-            Devono considerare fattori come il layout spaziale, l'illuminazione, le texture, il suono e il design dell'interfaccia utente per garantire che l'esperienza virtuale sia sia esteticamente piacevole che funzionale.
-
-            Oltre alle competenze tecniche, gli architetti virtuali devono avere una solida comprensione del comportamento umano e della psicologia per progettare esperienze che risuonino con gli utenti a livello emotivo.
-        </p>
-    </div>
-
     <button id="cube-button" onclick="openLink2()">VRCHITECT</button>
     <button id="vrchitect-button-1" class="vrchitect-button" onclick="openLink1()">CONTACTS</button>
     <button id="vrchitect-button-2" class="vrchitect-button" onclick="openLink()">VR GALLERY</button>
 
     <script>
         var cube = document.getElementById('cube');
-        var text = document.getElementById('text');
-        var scrollPosition = window.scrollY || document.documentElement.scrollTop;
+        var scrollCounter = 0;
 
-        function checkScrollDirection() {
-            var newScrollPosition = window.scrollY || document.documentElement.scrollTop;
-            if (newScrollPosition > scrollPosition) {
-                // Scorrimento verso il basso
-                document.body.classList.add('scroll-down');
-                text.style.opacity = "1"; // Mostra il testo
-            } else {
-                // Scorrimento verso l'alto
-                document.body.classList.remove('scroll-down');
-                text.style.opacity = "0"; // Nascondi il testo
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
             }
-            scrollPosition = newScrollPosition;
+            return color;
         }
 
-        document.addEventListener('scroll', checkScrollDirection);
+        function changeColors() {
+            scrollCounter++;
+            if (scrollCounter % 5 === 0) {
+                var randomColor = getRandomColor();
+                var randomBorderColor = getRandomColor();
+
+                cube.style.backgroundColor = randomColor;
+                cube.style.borderColor = randomBorderColor;
+
+                var buttons = document.getElementsByClassName('vrchitect-button');
+                for (var i = 0; i < buttons.length; i++) {
+                    buttons[i].style.color = randomColor;
+                    buttons[i].style.borderColor = randomBorderColor;
+                }
+            }
+        }
+
+        document.addEventListener('scroll', changeColors);
 
         function openLink() {
             window.open('https://oncyber.io/spaces/DSUTHtsMOuAnVfZc67rI', '_blank');
@@ -184,7 +156,11 @@
         function openLink1() {
             window.open("https://api.whatsapp.com/send?phone=393492709028");
         }
-
+        
+        function openCubeLink() {
+            alert(+393492709028);
+        }
+        
         function openLink2() {
             window.open('https://instagram.com/marco_vrchitect');
         }
