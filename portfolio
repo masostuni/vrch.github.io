@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Carosello</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: black; /* Modifica 1: sfondo nero */
+      color: white; /* Modifica 2: testo bianco */
+    }
+
+    .carousel {
+      position: relative;
+      max-width: 600px;
+      margin: auto;
+      overflow: hidden;
+      touch-action: pan-y; /* Modifica 3: consenti il movimento del dito sul carosello */
+    }
+
+    .carousel-inner {
+      display: flex;
+    }
+
+    .carousel-item {
+      min-width: 100%;
+      transition: transform 0.5s ease;
+    }
+
+    .carousel-item img {
+      width: 100%;
+      height: auto;
+    }
+
+    .prev,
+    .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+      z-index: 2;
+    }
+
+    .prev {
+      left: 0;
+    }
+
+    .next {
+      right: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item">
+        <img src="immagine1.jpg" alt="Immagine 1">
+      </div>
+      <div class="carousel-item">
+        <img src="immagine2.jpg" alt="Immagine 2">
+      </div>
+      <!-- Aggiungi più immagini qui -->
+    </div>
+    <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+    <button class="next" onclick="moveSlide(1)">&#10095;</button>
+  </div>
+  <script>
+    let slideIndex = 0;
+
+    function moveSlide(n) {
+      const slides = document.getElementsByClassName("carousel-item");
+      slideIndex += n;
+      if (slideIndex >= slides.length) {
+        slideIndex = 0;
+      }
+      if (slideIndex < 0) {
+        slideIndex = slides.length - 1;
+      }
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].style.transform = `translateX(-${slideIndex * 100}%)`;
+      }
+    }
+  </script>
+</body>
+</html>
