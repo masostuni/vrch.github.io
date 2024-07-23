@@ -106,6 +106,9 @@
             cursor: pointer;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
 </head>
 <body>
     <audio src="Fotonovela.mp3" autoplay loop></audio>
@@ -124,7 +127,54 @@
     <button id="cube-button" onclick="openLink2()">VRCHITECT</button>
     <button id="vrchitect-button-1" class="vrchitect-button" onclick="openLink1()">CONTACTS</button>
     <button id="vrchitect-button-2" class="vrchitect-button" onclick="openLink()">VR GALLERY</button>
-    
+    <div id="threejs-container" style="width: 100%; height: 400px;"></div>
+<script>
+    const container = document.getElementById('threejs-container');
+
+    // Scena, camera e renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
+
+    // Carica il modello GLTF
+    const loader = new THREE.GLTFLoader();
+    loader.load('3D/01.glb', function(gltf) {
+        scene.add(gltf.scene);
+    }, undefined, function(error) {
+        console.error(error);
+    });
+
+    camera.position.z = 5;
+
+    // Funzione di animazione
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // Aggiungi l'evento di click
+    window.addEventListener('click', () => {
+        scene.rotation.x += 0.1;
+        scene.rotation.y += 0.1;
+    });
+
+    // Aggiungi l'evento di scorrimento mobile
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (event) => {
+        touchStartY = event.touches[0].clientY;
+    });
+    window.addEventListener('touchmove', (event) => {
+        const touchEndY = event.touches[0].clientY;
+        const deltaY = touchEndY - touchStartY;
+        scene.rotation.x += deltaY * 0.01;
+        scene.rotation.y += deltaY * 0.01;
+        touchStartY = touchEndY;
+    });
+</script>
+
     <script>
         var cube = document.getElementById('cube');
         var scrollCounter = 0;
