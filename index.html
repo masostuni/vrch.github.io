@@ -11,6 +11,34 @@
             margin: 0;
         }
 
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: black;
+            padding: 10px;
+        }
+        .nav-menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            width: 100%;
+        }
+        .nav-menu li {
+            flex: 1;
+            text-align: center;
+        }
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            display: block;
+            padding: 10px;
+        }
+        .nav-menu a:hover {
+            color: #ddd;
+        }
+
         #container {
             position: absolute;
             top: 50%;
@@ -107,30 +135,6 @@
             border: 2px solid white;
             cursor: pointer;
         }
-
-        .navbar {
-            display: flex;
-            justify-content: flex-end;
-            background-color: #333;
-            padding: 10px;
-        }
-        .nav-menu {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
-        .nav-menu li {
-            margin: 0 15px;
-        }
-        .nav-menu a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .nav-menu a:hover {
-            color: #ddd;
-        }
     </style>
 </head>
 <body>
@@ -141,7 +145,7 @@
             <li><a href="#home">Home</a></li>
             <li><a href="#services">Servizi</a></li>
             <li><a href="#contact">Contatti</a></li>
-            <li><a href="#about">Chi Siamo</a></li>
+            <li><a href="#dapp">DApp</a></li>
             <li><a href="#" id="connect-wallet">Connetti Wallet</a></li>
         </ul>
     </nav>
