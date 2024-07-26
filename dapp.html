@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dapp</title>
+</head>
+<body>
+    <h1>Interazione con Smart Contract</h1>
+    <button id="interact-contract">Interagisci con il contratto</button>
+    
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+    <script>
+        document.getElementById('interact-contract').onclick = async () => {
+            const contractAddress = 'INDIRIZZO_DEL_CONTRATTO';
+            const abi = [
+                // ABI del contratto
+            ];
+
+            if (window.ethereum) {
+                const web3 = new Web3(window.ethereum);
+                const contract = new web3.eth.Contract(abi, contractAddress);
+
+                try {
+                    const accounts = await web3.eth.getAccounts();
+                    const result = await contract.methods.nomeFunzione().call({ from: accounts[0] });
+                    alert('Risultato: ' + result);
+                } catch (error) {
+                    console.error(error);
+                    alert('Interazione fallita');
+                }
+            } else {
+                alert('MetaMask non installato');
+            }
+        };
+    </script>
+</body>
+</html>
