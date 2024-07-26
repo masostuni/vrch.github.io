@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VRCHITECT</title>
     <style>
         body {
@@ -105,13 +107,44 @@
             border: 2px solid white;
             cursor: pointer;
         }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
+        .navbar {
+            display: flex;
+            justify-content: flex-end;
+            background-color: #333;
+            padding: 10px;
+        }
+        .nav-menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .nav-menu li {
+            margin: 0 15px;
+        }
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .nav-menu a:hover {
+            color: #ddd;
+        }
+    </style>
 </head>
 <body>
     <audio src="Fotonovela.mp3" autoplay loop></audio>
+
+    <nav class="navbar">
+        <ul class="nav-menu">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Servizi</a></li>
+            <li><a href="#contact">Contatti</a></li>
+            <li><a href="#about">Chi Siamo</a></li>
+            <li><a href="#" id="connect-wallet">Connetti Wallet</a></li>
+        </ul>
+    </nav>
 
     <div id="container">
         <div id="cube">
@@ -127,54 +160,8 @@
     <button id="cube-button" onclick="openLink2()">VRCHITECT</button>
     <button id="vrchitect-button-1" class="vrchitect-button" onclick="openLink1()">CONTACTS</button>
     <button id="vrchitect-button-2" class="vrchitect-button" onclick="openLink()">VR GALLERY</button>
-    <div id="threejs-container" style="width: 100%; height: 400px;"></div>
-<script>
-    const container = document.getElementById('threejs-container');
-
-    // Scena, camera e renderer
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    container.appendChild(renderer.domElement);
-
-    // Carica il modello GLTF
-    const loader = new THREE.GLTFLoader();
-    loader.load('3D/02.glb', function(gltf) {
-        scene.add(gltf.scene);
-    }, undefined, function(error) {
-        console.error(error);
-    });
-
-    camera.position.z = 5;
-
-    // Funzione di animazione
-    function animate() {
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-    }
-    animate();
-
-    // Aggiungi l'evento di click
-    window.addEventListener('click', () => {
-        scene.rotation.x += 0.1;
-        scene.rotation.y += 0.1;
-    });
-
-    // Aggiungi l'evento di scorrimento mobile
-    let touchStartY = 0;
-    window.addEventListener('touchstart', (event) => {
-        touchStartY = event.touches[0].clientY;
-    });
-    window.addEventListener('touchmove', (event) => {
-        const touchEndY = event.touches[0].clientY;
-        const deltaY = touchEndY - touchStartY;
-        scene.rotation.x += deltaY * 0.01;
-        scene.rotation.y += deltaY * 0.01;
-        touchStartY = touchEndY;
-    });
-</script>
-
+    
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
     <script>
         var cube = document.getElementById('cube');
         var scrollCounter = 0;
@@ -218,7 +205,22 @@
         function openLink2() {
             window.open("https://instagram.com/marco_vrchitect");
         }
+
+        document.getElementById('connect-wallet').onclick = async () => {
+            if (window.ethereum) {
+                try {
+                    await ethereum.request({ method: 'eth_requestAccounts' });
+                    const web3 = new Web3(window.ethereum);
+                    const accounts = await web3.eth.getAccounts();
+                    alert('Wallet connesso: ' + accounts[0]);
+                } catch (error) {
+                    console.error(error);
+                    alert('Connessione wallet fallita');
+                }
+            } else {
+                alert('MetaMask non installato');
+            }
+        };
     </script>
-    <div class="sketchfab-embed-wrapper"> <iframe title="VR cozy holl 2022" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share src="https://sketchfab.com/models/5de72233e93c46c786faa9a605d38537/embed?autostart=1&dnt=1"> </iframe> <p style="font-size: 13px; font-weight: normal; margin: 5px; color: #4A4A4A;"> <a href="https://sketchfab.com/3d-models/vr-cozy-holl-2022-5de72233e93c46c786faa9a605d38537?utm_medium=embed&utm_campaign=share-popup&utm_content=5de72233e93c46c786faa9a605d38537" target="_blank" rel="nofollow" style="font-weight: bold; color: #1CAAD9;"> VR cozy holl 2022 </a> by <a href="https://sketchfab.com/architect47?utm_medium=embed&utm_campaign=share-popup&utm_content=5de72233e93c46c786faa9a605d38537" target="_blank" rel="nofollow" style="font-weight: bold; color: #1CAAD9;"> VRA </a> on <a href="https://sketchfab.com?utm_medium=embed&utm_campaign=share-popup&utm_content=5de72233e93c46c786faa9a605d38537" target="_blank" rel="nofollow" style="font-weight: bold; color: #1CAAD9;">Sketchfab</a></p></div>
 </body>
 </html>
