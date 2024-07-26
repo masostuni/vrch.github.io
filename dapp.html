@@ -6,52 +6,227 @@
     <title>Dapp</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: black;
+            overflow: hidden;
             margin: 0;
-            background: #f0f0f0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: black;
+            padding: 10px;
+        }
+        .nav-menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            width: 100%;
+        }
+        .nav-menu li {
+            flex: 1;
             text-align: center;
         }
-        h1 {
-            margin-bottom: 20px;
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            display: block;
+            padding: 10px;
+            border: 2px solid white;
         }
-        #pyramid-container {
+        .nav-menu a:hover {
+            color: #ddd;
+        }
+
+        #container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            perspective: 800px;
+        }
+
+        #containervr {
+            position: absolute;
+            top: 85%;
+            left: 25%;
+            transform: translate(-50%, -50%);
+            perspective: 900px;
+        }
+        
+        #cube {
+            width: 300px;
+            height: 300px;
             position: relative;
-            width: 100px;
-            height: 100px;
-            margin: 0 auto;
+            transform-style: preserve-3d;
+            animation: rotateCube 10s linear infinite;
         }
-        .pyramid {
+
+        .face {
             position: absolute;
-            width: 0;
-            height: 0;
-            border-left: 50px solid transparent;
-            border-right: 50px solid transparent;
-            border-bottom: 100px solid #3498db;
-            animation: rotate 3s infinite linear;
+            width: 300px;
+            height: 300px;
+            border: 2px solid white;
+            opacity: 0.5;
         }
-        .pyramid:before {
-            content: '';
+
+        .front {
+            transform: translateZ(100px);
+        }
+
+        .back {
+            transform: translateZ(-100px) rotateY(180deg);
+        }
+
+        .right {
+            transform: rotateY(-90deg) translateZ(100px);
+        }
+
+        .left {
+            transform: rotateY(90deg) translateZ(100px);
+        }
+
+        .top {
+            transform: rotateX(90deg) translateZ(100px);
+        }
+
+        .bottom {
+            transform: rotateX(-90deg) translateZ(100px);
+        }
+
+        @keyframes rotateCube {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        .vrchitect-button {
             position: absolute;
-            left: -50px;
-            bottom: 100%;
-            width: 0;
-            height: 0;
-            border-left: 50px solid transparent;
-            border-right: 50px solid transparent;
-            border-bottom: 50px solid #2980b9;
+            bottom: 50px;
+            padding: 10px 20px;
+            background-color: transparent;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+            border: 2px solid white;
+            cursor: pointer;
         }
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
+
+        #vrchitect-button-1 {
+            left: 25%;
+            transform: translateX(-50%);
+        }
+
+        #vrchitect-button-2 {
+            left: 75%;
+            transform: translateX(-50%);
+        }
+
+        #cube-button {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: transparent;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+            border: 2px solid white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <audio src="Fotonovela.mp3" autoplay loop></audio>
+
+    <nav class="navbar">
+        <ul class="nav-menu">
+            <li><a href="dapp">dApp</a></li>
+            <li><a href="#" id="connect-wallet">Connetti Wallet</a></li>
+        </ul>
+    </nav>
+
+    <div id="container">
+        <div id="cube">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face right"></div>
+            <div class="face left"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+        </div>
+    </div>
+    
+    <button id="cube-button" onclick="openLink2()">VRCHITECT</button>
+    <button id="vrchitect-button-1" class="vrchitect-button" onclick="openLink1()">CONTACTS</button>
+    <button id="vrchitect-button-2" class="vrchitect-button" onclick="openLink()">VR GALLERY</button>
+    
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+    <script>
+        var cube = document.getElementById('cube');
+        var scrollCounter = 0;
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
             }
-            to {
-                transform: rotate(360deg);
+            return color;
+        }
+
+        function changeColors() {
+            scrollCounter++;
+            if (scrollCounter % 5 === 0) {
+                var randomColor = getRandomColor();
+                var randomBorderColor = getRandomColor();
+
+                cube.style.backgroundColor = randomColor;
+                cube.style.borderColor = randomBorderColor;
+
+                var buttons = document.getElementsByClassName('vrchitect-button');
+                for (var i = 0; i < buttons.length; i++) {
+                    buttons[i].style.color = randomColor;
+                    buttons[i].style.borderColor = randomBorderColor;
+                }
             }
         }
+
+        document.addEventListener('scroll', changeColors);
+
+        function openLink() {
+            window.open('https://oncyber.io/spaces/DSUTHtsMOuAnVfZc67rI', '_blank');
+        }
+
+        function openLink1() {
+            window.open("https://api.whatsapp.com/send?phone=393492709028");
+        }
+        
+        function openLink2() {
+            window.open("https://instagram.com/marco_vrchitect");
+        }
+
+        document.getElementById('connect-wallet').onclick = async () => {
+            if (window.ethereum) {
+                try {
+                    await ethereum.request({ method: 'eth_requestAccounts' });
+                    const web3 = new Web3(window.ethereum);
+                    const accounts = await web3.eth.getAccounts();
+                    alert('Wallet connesso: ' + accounts[0]);
+                } catch (error) {
+                    console.error(error);
+                    alert('Connessione wallet fallita');
+                }
+            } else {
+                alert('MetaMask non installato');
+            }
+        };
+    </script>
+</body>
+</html>
+
         #interact-contract {
             margin-top: 20px;
             padding: 10px 20px;
