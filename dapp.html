@@ -4,10 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dapp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f0f0f0;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        #pyramid-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+        }
+        .pyramid {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 100px solid #3498db;
+            animation: rotate 3s infinite linear;
+        }
+        .pyramid:before {
+            content: '';
+            position: absolute;
+            left: -50px;
+            bottom: 100%;
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 50px solid #2980b9;
+        }
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        #interact-contract {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        #interact-contract:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
-    <h1>Interazione con Smart Contract</h1>
-    <button id="interact-contract">Interagisci con il contratto</button>
+    <div>
+        <h1>Interazione con Smart Contract</h1>
+        <div id="pyramid-container">
+            <div class="pyramid"></div>
+        </div>
+        <button id="interact-contract">Interagisci con il contratto</button>
+    </div>
     
     <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
     <script>
